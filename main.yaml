@@ -1,0 +1,30 @@
+name: Deploy to Firebase Hosting
+
+on:
+  push:
+    branches: [ main ]  # Se activa al hacer push a la rama main/master
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest  # Sistema operativo de la máquina virtual
+
+    steps:
+      # 1. Checkout del código
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # 2. Instalar dependencias y construir (ejemplo para Node.js)
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build Project
+        run: npm run build  # Asegúrate de que este script exista en tu package.json
+
+      # 3. Desplegar en Firebase Hosting
+      - name: Deploy to Firebase
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}'  # Nombre del secret en GitHub
+          projectId: 'thesisflow-c02gu.firebaseapp.com'  # Reemplázalo con tu ID
+          channelId: live  # Opcional: para canales de despliegue (si usas Firebase Hosting avanzado)
